@@ -1,4 +1,6 @@
-import { useState } from 'react'
+'use client'
+
+import { useState, useEffect } from 'react'
 import { Input } from "@/Components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
 import { Button } from "@/Components/ui/button"
@@ -7,7 +9,9 @@ import { Badge } from "@/Components/ui/badge"
 import { ShoppingCart } from "lucide-react"
 import { usePage } from '@inertiajs/react'
 import { Product } from '@/types/product'
-
+import Navbar from "@/Components/Navbar"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from '@/Components/ui/toaster'
 const categories = [
   "All Products",
   "Electronics",
@@ -18,16 +22,46 @@ const categories = [
   "Toys & Games",
 ]
 
-export default function ProductList() {
+export default function Component() {
   const [selectedCategory, setSelectedCategory] = useState("All Products")
   const [searchTerm, setSearchTerm] = useState("")
   const [sortOrder, setSortOrder] = useState("featured")
   const { products } = usePage().props as unknown as { products: Product[] }
   const [cart, setCart] = useState<Product[]>([])
+  const { toast } = useToast()
+
+  useEffect(() => {
+    const savedCart = sessionStorage.getItem('cart')
+    if (savedCart) {
+      setCart(JSON.parse(savedCart))
+    }
+  }, [])
 
   const addToCart = (product: Product) => {
-    console.log("Adding to cart:", product) 
-    setCart((prevCart) => [...prevCart, product])
+    const existingProductIndex = cart.findIndex(item => item.product_id === product.product_id)
+    
+    let updatedCart
+    if (existingProductIndex !== -1) {
+      // Product already exists in the cart, update the quantity
+      updatedCart = cart.map((item, index) =>
+        index === existingProductIndex
+          ? { ...item, cart_quantity: item.cart_quantity + 1 }
+          : item
+      )
+    } else {
+      // Product does not exist in the cart, add it with quantity 1
+      updatedCart = [...cart, { ...product, cart_quantity: product.cart_quantity ?? 1 }]
+    }
+    setCart(updatedCart)
+    sessionStorage.setItem('cart', JSON.stringify(updatedCart))
+
+    // Show toast notification
+    console.log("Product added to cart")
+    toast({
+      title: "Added to Cart",
+      description: `${product.product_name} has been added to your cart.`,
+      duration: 3000,
+    })  
   }
 
   const filteredProducts = products
@@ -42,11 +76,12 @@ export default function ProductList() {
     })
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto py-4">
+      <Toaster />
+      <Navbar />
       <div className="flex flex-col gap-6">
         {/* Filters and Search */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Select category" />

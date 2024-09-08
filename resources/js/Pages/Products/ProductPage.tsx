@@ -4,10 +4,13 @@ import { Separator } from "@/Components/ui/separator"
 import { Badge } from "@/Components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Star, ShoppingCart } from "lucide-react"
+import Navbar from "@/Components/Navbar"
 
 export default function ProductPage() {
   return (
+    
     <div className="container mx-auto px-4 py-8">
+      <Navbar />
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         <div>
           <img

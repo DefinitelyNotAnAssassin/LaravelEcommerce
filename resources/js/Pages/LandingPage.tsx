@@ -1,6 +1,7 @@
 import { Input } from "@/Components/ui/input"
 import { Button } from "@/Components/ui/button"
 import { usePage } from "@inertiajs/react"
+import Navbar from "@/Components/Navbar"
 import { Product } from "@/types/product"
 
 
@@ -15,29 +16,10 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
       
-     
+      <Navbar />
 
 
-      <header className="px-4 lg:px-6 h-14 flex items-center">
-        <a href="#" className="flex items-center justify-center" >
-          <MountainIcon className="h-6 w-6" />
-          <span className="sr-only">Acme Ecommerce</span>
-        </a>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <a href="/shop" className="text-sm font-medium hover:underline underline-offset-4" >
-            Shop
-          </a>
-          <a href="#" className="text-sm font-medium hover:underline underline-offset-4" >
-            About
-          </a>
-          <a href="#" className="text-sm font-medium hover:underline underline-offset-4" >
-            Contact
-          </a>
-          <a href="#" className="text-sm font-medium hover:underline underline-offset-4" >
-            Cart
-          </a>
-        </nav>
-      </header>
+ 
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">

@@ -19,4 +19,15 @@ class HomeController extends Controller
             'products' => $products
         ]);
     }
+
+    public function contact()
+    {
+        return Inertia::render('Contact');
+    }   
+
+    public function about()
+    {
+        return Inertia::render('About');
+    }
+    
 }
